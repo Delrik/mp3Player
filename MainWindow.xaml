@@ -58,6 +58,30 @@
             <Setter Property="FontWeight" Value="ExtraBlack"/>
             <Setter Property="Foreground" Value="Purple"/>
             <Setter Property="Background" Value="RoyalBlue"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="SkyBlue"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+                <EventTrigger RoutedEvent="PreviewMouseDown">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ThicknessAnimation Storyboard.TargetProperty="Margin" 
+                                                Duration="0:0:0.100"
+                                                To="8,8,5,5"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="PreviewMouseUp">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                Duration="0:0:0.100"
+                                                To="5,5,5,5"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     <Grid Background="SandyBrown">
