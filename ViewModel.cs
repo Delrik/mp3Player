@@ -1,18 +1,12 @@
 ﻿using DevExpress.Mvvm;
 using HtmlAgilityPack;
-using NAudio.Wave;
 using System;
 using System.ComponentModel;
-using System.Configuration;
 using System.IO;
-using System.Media;
 using System.Net;
-using System.Security.Permissions;
-using System.Security.Policy;
-using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -59,10 +53,42 @@ namespace mp3player
     }
     class ViewModel : ViewModelBase
     {
+        public void check()
+        {
+            while (true)
+            {
+                RaisePropertiesChanged("position","duration");
+                Thread.Sleep(500);
+            }
+        }
+        public async void checkPosition()
+        {
+            await Task.Run(() => check());
+        }
+        bool isChecking = false;
         private BindingList<Data> _gridData = new BindingList<Data>();
         private string _textBoxData = "";
         private Data _selectedItem;
         private MediaPlayer player = new MediaPlayer();
+        public long duration
+        {
+            get
+            {
+                return player.NaturalDuration.TimeSpan.Ticks;
+            }
+        }
+        public long position
+        {
+            get
+            {
+                return player.Position.Ticks;
+            }
+            set
+            {
+                player.Position = new TimeSpan(value);
+                RaisePropertyChanged();
+            }
+        }
         public Data selectedItem
         {
             get
@@ -150,6 +176,12 @@ namespace mp3player
 
                     player.Open(new Uri(mp3));
                     player.Play();
+                    RaisePropertiesChanged("duration", "position");
+                    if (!isChecking)
+                    {
+                        isChecking = true;
+                        checkPosition();
+                    }
                 });
             }
         }

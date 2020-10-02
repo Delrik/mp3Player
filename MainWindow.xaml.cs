@@ -23,6 +23,7 @@ namespace mp3player
         public MainWindow()
         {
             InitializeComponent();
+
         }
     }
 }
