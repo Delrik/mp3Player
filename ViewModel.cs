@@ -57,7 +57,7 @@ namespace mp3player
         {
             while (true)
             {
-                RaisePropertiesChanged("position","duration");
+                RaisePropertiesChanged("position", "duration", "positionOnDuration");
                 Thread.Sleep(500);
             }
         }
@@ -65,16 +65,48 @@ namespace mp3player
         {
             await Task.Run(() => check());
         }
+        private string _playing = "Currentry playing:\nNothing";
+        public string playing
+        {
+            get
+            {
+                return _playing;
+            }
+            set
+            {
+                _playing = value;
+                RaisePropertyChanged();
+            }
+        }
         bool isChecking = false;
         private BindingList<Data> _gridData = new BindingList<Data>();
         private string _textBoxData = "";
         private Data _selectedItem;
         private MediaPlayer player = new MediaPlayer();
+        public string positionOnDuration
+        {
+            get
+            {
+                if (player.NaturalDuration.HasTimeSpan)
+                {
+                    string part1 = Convert.ToInt32(Math.Floor(player.Position.TotalMinutes)).ToString() + ":";
+                    string part2 = Convert.ToInt32(Math.Floor(player.Position.TotalSeconds) - Math.Floor(player.Position.TotalMinutes) * 60).ToString();
+                    if (part2.Length == 1) part2 = "0" + part2;
+                    part2 += "/";
+                    string part3 = Convert.ToInt32(Math.Floor(player.NaturalDuration.TimeSpan.TotalMinutes)).ToString() + ":";
+                    string part4 = Convert.ToInt32(Math.Floor(player.NaturalDuration.TimeSpan.TotalSeconds) - Math.Floor(player.NaturalDuration.TimeSpan.TotalMinutes) * 60).ToString();
+                    if (part4.Length == 1) part4 = "0" + part4;
+                    return part1 + part2 + part3 + part4;
+                }
+                return "0:00/0:00";
+            }
+        }
         public long duration
         {
             get
             {
-                return player.NaturalDuration.TimeSpan.Ticks;
+                if(player.NaturalDuration.HasTimeSpan) return player.NaturalDuration.TimeSpan.Ticks;
+                return 100;
             }
         }
         public long position
@@ -176,12 +208,13 @@ namespace mp3player
 
                     player.Open(new Uri(mp3));
                     player.Play();
-                    RaisePropertiesChanged("duration", "position");
+                    RaisePropertiesChanged("duration", "position", "positionOnDuration");
                     if (!isChecking)
                     {
                         isChecking = true;
                         checkPosition();
                     }
+                    playing = "Currently playing\n" + selectedItem.name;
                 });
             }
         }

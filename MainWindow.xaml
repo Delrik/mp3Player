@@ -89,6 +89,9 @@
                 </EventTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="TextBlock" x:Key="defaultText">
+            
+        </Style>
     </Window.Resources>
     <Grid Background="SandyBrown">
         <Grid.RowDefinitions>
@@ -124,7 +127,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="3" Grid.ColumnSpan ="3">
-            <Slider Value="{Binding position}" Minimum="0" Maximum="{Binding duration}" Margin="5,0,5,0"/>
+            <Slider IsMoveToPointEnabled="True" Value="{Binding position}" Minimum="0" Maximum="{Binding duration}" Margin="5,0,5,0"/>
         </StackPanel>
         <UniformGrid Grid.Row="4" Grid.Column="1">
             <Button Command="{Binding pauseBtn}" Style="{StaticResource footerButton}">
@@ -141,6 +144,12 @@
                 <Image Source="/img/icon_stop.png"/>
             </Button>
         </UniformGrid>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0">
+            <TextBlock TextAlignment="Center" Text="{Binding playing}"/>
+        </Viewbox>
+        <Viewbox Grid.Row="1" Grid.Column="2">
+            <TextBlock TextAlignment="Center" Text="{Binding positionOnDuration}"/>
+        </Viewbox>
     </Grid>
 
 </Window>
