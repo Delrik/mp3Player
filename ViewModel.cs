@@ -83,6 +83,18 @@ namespace mp3player
         private string _textBoxData = "";
         private Data _selectedItem;
         private MediaPlayer player = new MediaPlayer();
+        public double volume
+        {
+            get
+            {
+                return player.Volume * 100;
+            }
+            set
+            {
+                player.Volume = value / 100;
+                RaisePropertyChanged();
+            }
+        }
         public string positionOnDuration
         {
             get

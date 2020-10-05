@@ -105,6 +105,7 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="22"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="3">
             <TextBlock Style="{StaticResource DefaultHeader}">Input your track name</TextBlock>
@@ -150,6 +151,9 @@
         <Viewbox Grid.Row="1" Grid.Column="2">
             <TextBlock TextAlignment="Center" Text="{Binding positionOnDuration}"/>
         </Viewbox>
+        <UniformGrid Grid.Column="3" Grid.RowSpan="5">
+            <Slider IsMoveToPointEnabled="True" Minimum="0" Maximum="100" Orientation="Vertical" Value="{Binding volume}" Margin="0,5,0,5"/>
+        </UniformGrid>
     </Grid>
 
 </Window>
